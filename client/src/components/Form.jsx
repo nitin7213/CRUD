@@ -1,10 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Form = () => {
-  const [users, setUsers] = useState([
-    { Name: "nitin", Email: "nitineon123@gmail.com", Age: 21 },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  // Function to fetch data from backend
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001");
+      setUsers(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Delete user
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/${id}`);
+      // After deletion, fetch updated user list
+      fetchData();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   return (
     <div>
@@ -12,7 +36,7 @@ const Form = () => {
         CRUD OPERATION
       </div>
       <div className="flex justify-end mr-16">
-        <Link to="create" state={"Create User"}>
+        <Link to="create">
           {" "}
           <button className="mt-20 bg-green-500 text-white p-3 rounded-xl">
             Add User
@@ -39,36 +63,36 @@ const Form = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-              {users.map((user, index) => {
-                return (
-                  <>
-                    <tr
-                      key={index}
-                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+              {users.map((user) => (
+                <tr
+                  key={user._id}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                >
+                  <td className="py-4 px-6 text-sm font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
+                    {user.Name}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-center text-gray-500 whitespace-nowrap dark:text-white">
+                    {user.Email}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
+                    {user.Age}
+                  </td>
+                  <td className="py-4 px-6 text-sm font-medium text-center whitespace-nowrap">
+                    <Link to={`update/${user._id}`}>
+                      <button className="mr-3 text-blue-600 dark:text-blue-500 hover:underline">
+                        Edit
+                      </button>{" "}
+                    </Link>
+
+                    <button
+                      className="text-blue-600 dark:text-blue-500 hover:underline"
+                      onClick={() => handleDelete(user._id)} // Pass user ID to handleDelete function
                     >
-                      <td className="py-4 px-6 text-sm font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                        {user.Name}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-center text-gray-500 whitespace-nowrap dark:text-white">
-                        {user.Email}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-center text-gray-900 whitespace-nowrap dark:text-white">
-                        {user.Age}
-                      </td>
-                      <td className="py-4 px-6 text-sm font-medium text-center whitespace-nowrap">
-                        <Link to="update" state={"Update User"}>
-                          <button className="mr-3 text-blue-600 dark:text-blue-500 hover:underline">
-                            Edit
-                          </button>{" "}
-                        </Link>
-                        <button className="text-blue-600 dark:text-blue-500 hover:underline">
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  </>
-                );
-              })}
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
