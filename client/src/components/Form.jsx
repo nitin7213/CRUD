@@ -8,7 +8,7 @@ const Form = () => {
   // Function to fetch data from backend
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001");
+      const response = await axios.get("http://localhost:3001/");
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -78,7 +78,7 @@ const Form = () => {
                     {user.Age}
                   </td>
                   <td className="py-4 px-6 text-sm font-medium text-center whitespace-nowrap">
-                    <Link to={`update/${user._id}`}>
+                    <Link to={"update/" + user._id}>
                       <button className="mr-3 text-blue-600 dark:text-blue-500 hover:underline">
                         Edit
                       </button>{" "}
