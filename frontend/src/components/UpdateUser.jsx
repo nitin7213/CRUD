@@ -9,22 +9,21 @@ const UpdateUser = () => {
 
   const navigate = useNavigate();
 
-  // Function to fetch data from backend
+  // Function to fetch data from Link
   const { id } = useParams();
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`http://localhost:3001/${id}`);
-      const userData = response.data;
-      setName(userData.Name);
-      setEmail(userData.Email);
-      setAge(userData.Age);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3001/${id}`);
+        const userData = response.data;
+        setName(userData.Name);
+        setEmail(userData.Email);
+        setAge(userData.Age);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
     fetchData();
   }, [id]); // Fetch data when ID changes
 
