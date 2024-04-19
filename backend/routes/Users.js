@@ -7,16 +7,16 @@ const {
   handleGetId,
 } = require("../controller/Users");
 
-const routes = express.Router();
+const router = express.Router();
 
-routes.post("/create", handlePost);
+router.post("/create", handlePost);
 
-routes.get("/", handleGet);
+router.get("/", handleGet);
 
-routes.get("/:id", handleGetId);
+router.get("/:id", handleGetId);
 
-routes.patch("/:id", handlePatch);
+router.patch("/:id", handlePatch);
 
-routes.delete("/:id", handleDelete);
+router.delete("/:id", handleDelete);
 
-module.exports = routes;
+module.exports = router;
